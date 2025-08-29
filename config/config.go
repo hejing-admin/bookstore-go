@@ -2,7 +2,7 @@ package config
 
 import (
 	"bookstore-go/pkg/mlog"
-	"bookstore-go/utils"
+	"bookstore-go/pkg/utils"
 	"crypto/sha256"
 	"fmt"
 	"github.com/mohae/deepcopy"

@@ -2,7 +2,7 @@ package router
 
 import (
 	"bookstore-go/config"
-	"bookstore-go/utils"
+	"bookstore-go/pkg/utils"
 	"bookstore-go/web/handler"
 	"fmt"
 
