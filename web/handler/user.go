@@ -3,7 +3,6 @@ package handler
 import (
 	"bookstore-go/service"
 	"bookstore-go/web/response"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,11 +31,7 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 
 func (u *UserHandler) UserRegister(c *gin.Context) {
 	// step 1. param verify
-	var req RegisterRequest
-	if err := c.ShouldBindJSON(&req); err != nil {
-		response.BadRequest(c, "bad param", err)
-		return
-	}
+	req := c.MustGet(gin.BindKey).(*RegisterRequest)
 
 	// step 2.  todo 验证码的校验
 
