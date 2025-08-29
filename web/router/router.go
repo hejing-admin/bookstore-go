@@ -14,11 +14,13 @@ const (
 )
 
 type HttpRouter struct {
+	config      config.Config
 	userHandler *handler.UserHandler
 }
 
-func InitHttpRouter(userHandler *handler.UserHandler) error {
+func InitHttpRouter(config config.Config, userHandler *handler.UserHandler) error {
 	httpRouter := &HttpRouter{
+		config:      config,
 		userHandler: userHandler,
 	}
 
@@ -36,7 +38,7 @@ func (r *HttpRouter) init() error {
 	users.POST("/register", utils.Bind(handler.RegisterRequest{}), r.userHandler.UserRegister)
 	users.POST("/login", utils.Bind(handler.LoginRequest{}), r.userHandler.UserLogin)
 
-	if err := router.Run(fmt.Sprintf("%s:%d", config.AppConfig.Server.Host, config.AppConfig.Server.Port)); err != nil {
+	if err := router.Run(fmt.Sprintf("%s:%d", r.config.Value().Server.Host, r.config.Value().Server.Port)); err != nil {
 		return err
 	}
 

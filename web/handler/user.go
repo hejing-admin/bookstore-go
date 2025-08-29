@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"bookstore-go/pkg/mlog"
 	"bookstore-go/service"
 	"bookstore-go/web/response"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type UserHandler struct {

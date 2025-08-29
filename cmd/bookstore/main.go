@@ -3,6 +3,7 @@ package main
 import (
 	"bookstore-go/config"
 	"bookstore-go/global"
+	"bookstore-go/pkg/mlog"
 	"bookstore-go/repository"
 	"bookstore-go/service"
 	"bookstore-go/web/handler"
@@ -11,14 +12,21 @@ import (
 )
 
 func main() {
+	// init log printf util
+	mlog.Init(mlog.DefaultOptions())
+
 	// init config
-	config.InitConfig("./conf/config.yaml")
+	config, err := config.NewConfig("./conf/config.yaml")
+	if err != nil {
+		mlog.Fatalf("failed to init config: %v", err)
+		return
+	}
 
 	// init mysql
-	// global.InitMysql(config.AppConfig.Mysql)
+	global.InitMysql(config.Value().Mysql)
 
 	// init redis
-	// global.InitRedis(config.AppConfig.Redis)
+	global.InitRedis(config.Value().Redis)
 
 	// init dao
 	userDao := repository.NewUserDAO(global.GetDB())
@@ -30,7 +38,7 @@ func main() {
 	userHandler := handler.NewUserHandler(userService)
 
 	// init router
-	if err := router.InitHttpRouter(userHandler); err != nil {
+	if err := router.InitHttpRouter(config, userHandler); err != nil {
 		log.Fatalf("init http router fail: %s", err)
 		return
 	}
