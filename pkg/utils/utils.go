@@ -2,10 +2,11 @@ package utils
 
 import (
 	"bookstore-go/web/response"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"log"
 	"reflect"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 // Bind creates a middleware that binds request data to a struct.

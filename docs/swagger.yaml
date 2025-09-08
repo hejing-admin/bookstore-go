@@ -1,0 +1,66 @@
+basePath: /api/v1
+definitions:
+  bookstore-go_web_response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  web_handler.RegisterRequest:
+    properties:
+      confirm_password:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:19101
+info:
+  contact: {}
+  description: BookStore API Server
+  title: BookStore Api Server Swagger API
+  version: "1.0"
+paths:
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: register user
+      parameters:
+      - description: register user request
+        in: body
+        name: RegisterRequest
+        required: true
+        schema:
+          $ref: '#/definitions/web_handler.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/bookstore-go_web_response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/bookstore-go_web_response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/bookstore-go_web_response.Response'
+      summary: Register User
+      tags:
+      - Users
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

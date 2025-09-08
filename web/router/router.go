@@ -2,11 +2,15 @@ package router
 
 import (
 	"bookstore-go/config"
+	_ "bookstore-go/docs"
 	"bookstore-go/pkg/utils"
 	"bookstore-go/web/handler"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 const (
@@ -32,6 +36,13 @@ func (r *HttpRouter) init() error {
 	router := gin.Default()
 
 	v1 := router.Group(ApiV1)
+
+	// health check
+	router.GET("", func(c *gin.Context) {
+		c.AbortWithStatusJSON(http.StatusOK, nil)
+	})
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// user module
 	users := v1.Group("/users")

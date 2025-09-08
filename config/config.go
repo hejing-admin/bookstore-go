@@ -5,12 +5,13 @@ import (
 	"bookstore-go/pkg/utils"
 	"crypto/sha256"
 	"fmt"
-	"github.com/mohae/deepcopy"
-	"go.uber.org/zap"
 	"os"
 	"reflect"
 	"sync"
 	"time"
+
+	"github.com/mohae/deepcopy"
+	"go.uber.org/zap"
 
 	"gopkg.in/yaml.v3"
 )
