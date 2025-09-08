@@ -11,9 +11,19 @@ import (
 	"log"
 )
 
+//	@title			BookStore Api Server Swagger API
+//	@version		1.0
+//	@description	BookStore API Server
+
+//	@host		localhost:19101
+//	@BasePath	/api/v1
+
+// @securityDefinitions.basic	BasicAuth
 func main() {
 	// init log printf util
 	mlog.Init(mlog.DefaultOptions())
+
+	// Note: swagger接入：https://theguodong.com/articles/Gin/Gin%E4%BD%BF%E7%94%A8swagger%E7%94%9F%E6%88%90%E6%96%87%E6%A1%A3/
 
 	// init config
 	config, err := config.NewConfig("./conf/config.yaml")

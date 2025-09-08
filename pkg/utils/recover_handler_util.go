@@ -3,8 +3,9 @@ package utils
 import (
 	"bookstore-go/pkg/mlog"
 	"fmt"
-	"go.uber.org/zap"
 	"runtime"
+
+	"go.uber.org/zap"
 )
 
 var DefaultRecoverHandler = func(r interface{}) {
