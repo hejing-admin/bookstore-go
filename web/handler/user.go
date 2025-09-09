@@ -1,12 +1,10 @@
 package handler
 
 import (
-	"bookstore-go/pkg/mlog"
 	"bookstore-go/service"
 	"bookstore-go/web/response"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type UserHandler struct {
@@ -32,6 +30,18 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 	}
 }
 
+// UserRegister godoc
+//
+//	@Summary		Register User
+//	@Description	register user
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			RegisterRequest	body		RegisterRequest	true	"register user request"
+//	@Success		200				{object}	response.Response
+//	@Failure		400				{object}	response.Response
+//	@Failure		500				{object}	response.Response
+//	@Router			/users/register  [POST]
 func (u *UserHandler) UserRegister(c *gin.Context) {
 	// step 1. param verify
 	req := c.MustGet(gin.BindKey).(*RegisterRequest)
