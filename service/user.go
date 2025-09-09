@@ -6,8 +6,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-
-	"gorm.io/gorm"
 )
 
 type UserService struct {
@@ -48,7 +46,7 @@ func (u *UserService) checkUserExists(username, phone, email string) (bool, erro
 	// check username
 	users, err := u.userDao.GetUsersByIdentities(username, phone, email)
 	if err != nil {
-		if !errors.Is(err, gorm.ErrRecordNotFound) {
+		if !errors.Is(err, repository.ErrUserNotFound) {
 			return false, err
 		}
 	}

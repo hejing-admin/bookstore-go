@@ -3,12 +3,17 @@ package repository
 import (
 	"bookstore-go/model"
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
 
 var (
 	ErrUserNotFound = errors.New("user not found")
+)
+
+const (
+	userTableName = "user"
 )
 
 type UserDao struct {
@@ -22,12 +27,18 @@ func NewUserDAO(db *gorm.DB) *UserDao {
 }
 
 func (u *UserDao) CreateUser(user *model.User) error {
-	return u.db.Create(user).Error
+	if user.CreateAt.IsZero() {
+		user.CreateAt = time.Now()
+	}
+	if user.UpdateAt.IsZero() {
+		user.UpdateAt = time.Now()
+	}
+	return u.db.Table(userTableName).Create(user).Error
 }
 
 func (u *UserDao) GetUserByName(username string) (*model.User, error) {
 	var user model.User
-	if err := u.db.Where("username = ?", username).First(&user).Error; err != nil {
+	if err := u.db.Table(userTableName).Where("username = ?", username).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
@@ -38,7 +49,7 @@ func (u *UserDao) GetUserByName(username string) (*model.User, error) {
 
 func (u *UserDao) GetUserByPhone(phone string) (*model.User, error) {
 	var user model.User
-	if err := u.db.Where("phone = ?", phone).First(&user).Error; err != nil {
+	if err := u.db.Table(userTableName).Where("phone = ?", phone).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
@@ -49,7 +60,7 @@ func (u *UserDao) GetUserByPhone(phone string) (*model.User, error) {
 
 func (u *UserDao) GetUserByEmail(email string) (*model.User, error) {
 	var user model.User
-	if err := u.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := u.db.Table(userTableName).Where("email = ?", email).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrUserNotFound
 		}
@@ -60,7 +71,7 @@ func (u *UserDao) GetUserByEmail(email string) (*model.User, error) {
 
 func (u *UserDao) GetUsersByIdentities(username, phone, email string) ([]model.User, error) {
 	var users []model.User
-	err := u.db.
+	err := u.db.Table(userTableName).
 		Where("username = ?", username).
 		Or("phone = ?", phone).
 		Or("email = ?", email).
@@ -79,7 +90,7 @@ func (u *UserDao) GetUsersByIdentities(username, phone, email string) ([]model.U
 
 func (u *UserDao) ListUsers() ([]*model.User, error) {
 	var users []*model.User
-	if err := u.db.Find(&users).Error; err != nil {
+	if err := u.db.Table(userTableName).Find(&users).Error; err != nil {
 		return nil, err
 	}
 

@@ -4,6 +4,7 @@ import (
 	"bookstore-go/pkg/mlog"
 	"bookstore-go/service"
 	"bookstore-go/web/response"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -39,12 +40,14 @@ func (u *UserHandler) UserRegister(c *gin.Context) {
 
 	// step 3. 验证两次密码是否一致
 	if req.Password != req.ConfirmPassword {
+		mlog.Warn("the two password entries are inconsistent", zap.String("username", req.Username))
 		response.BadRequest(c, "passwords do not match", nil)
 		return
 	}
 
 	// step 3. call service to register user
 	if err := u.userService.UserRegister(req.Username, req.Password, req.Email, req.Phone); err != nil {
+		mlog.Warn("failed to register user", zap.String("username", req.Username), zap.Error(err))
 		response.InternalError(c, "user register fail", err)
 		return
 	}

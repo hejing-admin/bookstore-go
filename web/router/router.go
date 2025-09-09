@@ -5,6 +5,7 @@ import (
 	"bookstore-go/pkg/utils"
 	"bookstore-go/web/handler"
 	"fmt"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +32,26 @@ func InitHttpRouter(config config.Config, userHandler *handler.UserHandler) erro
 func (r *HttpRouter) init() error {
 	router := gin.Default()
 
+	// 处理跨域问题
+	router.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Content-Allow-Methods", "POST, GET, OPTIONS, PUT, PATCH, DELETE")
+		c.Header("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
+		c.Header("Access-Control-Expose-Headers", "authorization, origin, content-type, accept")
+		c.Header("Access-Control-Allow-Credentials", "true")
+
+		// 处理预检请求
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	})
+
 	v1 := router.Group(ApiV1)
+
+	// todo 添加接口签名校验
 
 	// user module
 	users := v1.Group("/users")
